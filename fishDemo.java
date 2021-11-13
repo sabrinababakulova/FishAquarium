@@ -53,7 +53,7 @@ public class fishDemo {
                      * 
                      * EACH SECOND IS ONE DAY
                      */
-                    eachFish.wait(periodOfTime * 100);
+                    eachFish.wait(periodOfTime * 1000);
                     System.out.println("Its been " + periodOfTime + " days, and...");
 
                     // checking if the fish is alive to be able to breed, 50 days is max a fish can
