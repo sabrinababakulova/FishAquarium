@@ -1,14 +1,17 @@
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadLocalRandom;
+import java.awt.*;
+import java.text.SimpleDateFormat;
 
+import javax.swing.*;
 import java.util.*;
 
 public class fishDemo {
 
     public static void main(String[] args) {
 
-        int numberOfFish = ThreadLocalRandom.current().nextInt(1, 100);
+        int numberOfFish = ThreadLocalRandom.current().nextInt(1, 30);
         int males = 0;
         int females = 0;
         FishThread fish;
@@ -17,8 +20,8 @@ public class fishDemo {
         int randomIndexOfFIsh; // initializing info variables
 
         ExecutorService ex = Executors.newCachedThreadPool();
-        Vector<FishThread> newFishes = new Vector<FishThread>();
         Vector<FishThread> allFishes = new Vector<FishThread>(); // creating collections of new and old and dead fish
+        Vector<FishThread> newFishes = new Vector<FishThread>();
         Vector<FishThread> deadFishes = new Vector<FishThread>();
 
         for (int i = 0; i < numberOfFish; i++) { // adding each Fish in the pool
@@ -41,10 +44,10 @@ public class fishDemo {
             periodOfTime = ThreadLocalRandom.current().nextInt(1, 10); // random period of time in the interval of 10
                                                                        // days
             wholeTime += periodOfTime; // getting whole time
+            randomIndexOfFIsh = (int) (Math.random() * allFishes.size()); // random fish
 
             synchronized (eachFish) {
                 try {
-                    randomIndexOfFIsh = (int) (Math.random() * allFishes.size()); // random fish
 
                     System.out.println("\nwaiting...");
 
@@ -67,29 +70,29 @@ public class fishDemo {
                         FishThread deadFish = new FishThread(); // creating deadFish
                         deadFishes.add(deadFish);
 
-                        // if both chosen fish are alive then they breed.
-                    } else {
-                        if (eachFish.getGender() != allFishes.get(randomIndexOfFIsh).getGender()) {
+                    }
+                    
+                    // if both chosen fish are alive then they breed.
+                    if (eachFish.getGender() != allFishes.get(randomIndexOfFIsh).getGender()) {
 
-                            FishThread newFish = new FishThread(); // creating babyFish
-                            newFishes.add(newFish); // adding babyFish to new pool, in which every new fish will be
-                                                    // stored
+                        FishThread newFish = new FishThread(); // creating babyFish
+                        newFishes.add(newFish); // adding babyFish to new pool, in which every new fish will be
+                                                // stored
 
-                            System.out.println("New fish is created! its " + newFish.getGender()); // seeing what gender
-                                                                                                   // it
-                                                                                                   // is
+                        System.out.println("New fish is born! its " + newFish.getGender()); // seeing what gender
+                                                                                            // it
+                                                                                            // is
 
-                            ex.execute(newFish); // making new Fish its own thread
+                        ex.execute(newFish); // making new Fish its own thread
 
-                            if (newFish.getGender() == 'M') { // getting number of males and females if new pool
-                                males++;
-                            } else {
-                                females++;
-                            }
-
-                        } else { // if fish have same gender, nothing will happen
-                            System.out.println("nothing happened yet..");
+                        if (newFish.getGender() == 'M') { // getting number of males and females if new pool
+                            males++;
+                        } else {
+                            females++;
                         }
+
+                    } else { // if fish have same gender, nothing will happen
+                        System.out.println("nothing happened yet..");
                     }
 
                 } catch (InterruptedException e) {
@@ -112,7 +115,3 @@ public class fishDemo {
     }
 
 }
-
-// create a threadpool for random number. DONE
-// every thread will have name Nn or Mn based on their gender. DONE
-// after random time check the process.
